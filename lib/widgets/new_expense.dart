@@ -43,7 +43,16 @@ class _NewExpenseState extends State<NewExpense> {
           context: context,
           builder: (ctx) {
             return AlertDialog(
-              title: Text("Error yes we have"),
+              title: Text("Invalid input"),
+              content: Text("Make sure valid data is entered"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Close"),
+                )
+              ],
             );
           });
     }
