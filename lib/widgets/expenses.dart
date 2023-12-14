@@ -12,21 +12,21 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
-    Expense(
-        title: "flutter course",
-        amount: 19.99,
-        date: DateTime.now(),
-        category: Category.work),
-    Expense(
-        title: "akullore",
-        amount: 9.99,
-        date: DateTime.now(),
-        category: Category.food),
-    Expense(
-        title: "Hotel Bonita",
-        amount: 50.99,
-        date: DateTime.now(),
-        category: Category.travel),
+    // Expense(
+    //     title: "flutter course",
+    //     amount: 19.99,
+    //     date: DateTime.now(),
+    //     category: Category.work),
+    // Expense(
+    //     title: "akullore",
+    //     amount: 9.99,
+    //     date: DateTime.now(),
+    //     category: Category.food),
+    // Expense(
+    //     title: "Hotel Bonita",
+    //     amount: 50.99,
+    //     date: DateTime.now(),
+    //     category: Category.travel),
   ];
 
   void _addExpense(Expense expense) {
@@ -36,9 +36,25 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
+    final index = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
     });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(milliseconds: 2000),
+        content: Text("Expense Deleted"),
+        action: SnackBarAction(
+            label: "Undo",
+            onPressed: () {
+              setState(() {
+                _registeredExpenses.insert(index, expense);
+              });
+            }),
+      ),
+    );
   }
 
   void _openAddExpenseOverlay() {
@@ -54,6 +70,23 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Container(
+      margin: EdgeInsets.only(top: 50),
+      color: Colors.pink[50],
+      child: const Center(
+        child: Text("No expenses found!"),
+      ),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = Expanded(
+        child: ExpensesList(
+          expenses: _registeredExpenses,
+          removeExpense: _removeExpense,
+        ),
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -65,15 +98,15 @@ class _ExpensesState extends State<Expenses> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Text("The Chart"),
-            Expanded(
-                child: ExpensesList(
-              expenses: _registeredExpenses,
-              removeExpense: _removeExpense,
-            )),
-          ],
+        body: Container(
+          color: Colors.blue[50],
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text("The Chart"),
+              mainContent,
+            ],
+          ),
         ));
   }
 }
