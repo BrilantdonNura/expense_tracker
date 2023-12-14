@@ -72,7 +72,7 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     Widget mainContent = Container(
       margin: EdgeInsets.only(top: 50),
-      color: Colors.pink[50],
+      // color: Colors.pink[50],
       child: const Center(
         child: Text("No expenses found!"),
       ),
@@ -99,9 +99,7 @@ class _ExpensesState extends State<Expenses> {
           ],
         ),
         body: Container(
-          color: Colors.blue[50],
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             children: [
               Text("The Chart"),
               mainContent,
